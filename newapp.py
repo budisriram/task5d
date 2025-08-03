@@ -49,12 +49,25 @@ if model_file and scaler_file:
         submitted = st.form_submit_button("Predict Price")
 
         if submitted:
-            input_data = np.array([[
-                squareMeters, numberOfRooms, int(hasYard), int(hasPool), floors,
-                cityCode, cityPartRange, numPrevOwners, made, int(isNewBuilt),
-                int(hasStormProtector), basement, attic, garage,
-                int(hasStorageRoom), int(hasGuestRoom)
-            ]])
+            input_data = pd.DataFrame([{
+                "squareMeters": squareMeters,
+                "numberOfRooms": numberOfRooms,
+                "hasYard": int(hasYard),
+                "hasPool": int(hasPool),
+                "floors": floors,
+                "cityCode": cityCode,
+                "cityPartRange": cityPartRange,
+                "numPrevOwners": numPrevOwners,
+                "made": made,
+                "isNewBuilt": int(isNewBuilt),
+                "hasStormProtector": int(hasStormProtector),
+                "basement": basement,
+                "attic": attic,
+                "garage": garage,
+                "hasStorageRoom": int(hasStorageRoom),
+                "hasGuestRoom": int(hasGuestRoom)
+            }])
+           
 
             input_data["AgeOfHouse"] = 2025 - input_data["made"]
             input_data["HasGarageOrStorage"] = ((input_data["garage"] > 0) | (input_data["hasStorageRoom"] == 1)).astype(int)
