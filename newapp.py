@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 import pickle
-import pandas as pd
 
 st.set_page_config(page_title="Paris Housing Price Predictor", layout="centered")
 st.title("🏠 Paris Housing Price -  Predictor")
@@ -77,12 +76,27 @@ if model_file and scaler_file:
             for i in [3, 4, 5, 6, 7, 9, 10]:
                 input_data[f"CityPart_{i}"] = 1 if cityPartRange == i else 0
 
-            input_data = input_data[scaler.feature_names_in_]
-            input_scaled = scaler.transform(input_data)
-            prediction = model.predict(input_scaled)[0]
 
-            st.session_state.predicted = True
-            st.session_state.prediction = prediction
+            expected_features = list(scaler.feature_names_in_)
+            missing_features = set(expected_features) - set(input_data.columns)
+
+            for col in missing_features:
+                input_data[col] = 0
+
+            
+            input_data = input_data[expected_features]
+
+            # === Step 5: Scale and predict ===
+            try:
+                input_scaled = scaler.transform(input_data)
+                prediction = model.predict(input_scaled)[0]
+
+                st.session_state.predicted = True
+                st.session_state.prediction = prediction
+            except Exception as e:
+                st.error(f"Prediction failed: {e}")
+            
+            
 
     # === Show prediction result ===
     if st.session_state.predicted:
