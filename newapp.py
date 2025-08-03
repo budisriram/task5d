@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pickle
+import pandas as pd
 
 st.set_page_config(page_title="Paris Housing Price Predictor", layout="centered")
 st.title("🏠 Paris Housing Price -  Predictor")
