@@ -56,6 +56,14 @@ if model_file and scaler_file:
                 int(hasStorageRoom), int(hasGuestRoom)
             ]])
 
+            input_data["AgeOfHouse"] = 2025 - input_data["made"]
+            input_data["HasGarageOrStorage"] = ((input_data["garage"] > 0) | (input_data["hasStorageRoom"] == 1)).astype(int)
+            input_data["PricePerSqm"] = input_data["squareMeters"] * 1000
+
+            for i in [3, 4, 5, 6, 7, 9, 10]:
+                input_data[f"CityPart_{i}"] = 1 if cityPartRange == i else 0
+
+            input_data = input_data[scaler.feature_names_in_]
             input_scaled = scaler.transform(input_data)
             prediction = model.predict(input_scaled)[0]
 
